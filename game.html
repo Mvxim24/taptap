@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тапалка</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; background-color: #f4f4f4; }
+        h1 { color: #333; }
+        #tapButton {
+            padding: 20px;
+            font-size: 20px;
+            margin: 20px;
+            background-color: #0084ff;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        #score { font-size: 24px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Тапай как можно быстрее!</h1>
+    <button id="tapButton">Тап!</button>
+    <div id="score">Очки: 0</div>
+    <script>
+        let score = 0;
+        let gameActive = true;
+        let tg = window.Telegram.WebApp; // API Telegram WebApp
+
+        document.getElementById("tapButton").addEventListener("click", function () {
+            if (!gameActive) return;
+            score++;
+            document.getElementById("score").innerText = "Очки: " + score;
+        });
+
+        // Таймер: 10 секунд на игру
+        setTimeout(() => {
+            gameActive = false;
+            document.getElementById("tapButton").innerText = "Игра окончена!";
+
+            // Отправляем результат боту
+            tg.sendData(score.toString());
+            tg.close(); // Закрываем Mini App
+        }, 10000);
+
+        tg.expand(); // Разворачиваем Mini App на весь экран
+    </script>
+</body>
+</html>
